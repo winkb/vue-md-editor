@@ -1,0 +1,20 @@
+.markdown-editor{
+    .header{
+        .button{
+            margin-left: 5px;
+            padding-left : 10px;
+            padding-right: 12px;
+            padding-top: 3px;
+            padding-bottom: 3px;
+            border-radius: 3px;
+            outline: none;
+        }
+        .button::before{
+            font-size: 18px;
+        }
+
+        .button:hover{
+            background-color: #eee;
+        }
+    }
+}
