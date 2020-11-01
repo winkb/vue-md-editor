@@ -5,7 +5,9 @@ const FontBlodComponent = defineComponent({
     setup() {
 
         return () => (
-            <button class="button iconfont icon-jiacu"></button>
+            <div>
+                <button class="button iconfont icon-jiacu"></button>
+            </div>
         )
     }
 });

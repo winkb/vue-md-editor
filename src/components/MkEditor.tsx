@@ -6,41 +6,27 @@ import "./editor.scss"
 
 
 function getMarkdownDefaultContent() {
-    return `
-\`\`\`javascript
-let a = 1
-\`\`\`
-\`\`\`php
-$a = 1
-\`\`\`
-\`\`\`javascript
-let a = 1
-\`\`\`
-    `
+    return ``
 }
 
 const MkEditorComponent = defineComponent({
     setup() {
         let markdownContent = getMarkdownDefaultContent()
         let htmlContent = ref(markdownContent)
-        let adornCommand = reactive({
-            name: "",
-            data: {}
-        })
+        let editorRef: any = ref(null)
 
         function onMarkdownChange(newContent: string) {
-            htmlContent.value = newContent
+            if (typeof newContent == "string") htmlContent.value = newContent
         }
 
         //提供给header按钮组件点击
         provide("clickButton", (name: string, data: any) => {
             //editor需要知道命令名称和命令的数据
-            adornCommand.name = name
-            adornCommand.data = data
+            editorRef.value.onAdornText(name, data)
         })
 
         return {
-            htmlContent, markdownContent, onMarkdownChange, adornCommand
+            htmlContent, markdownContent, onMarkdownChange, editorRef
         }
     },
     render() {
@@ -56,7 +42,7 @@ const MkEditorComponent = defineComponent({
                     <div class=" w-full flex flex-1 justify-center h-64 ">
                         {/* left */}
                         <div class=" text-black w-1/2 overflow-x-hidden break-words break-all">
-                            <EditorComponent command={this.adornCommand} onChange={this.onMarkdownChange} content={this.markdownContent} />
+                            <EditorComponent ref="editorRef" onChange={this.onMarkdownChange} content={this.markdownContent} />
                         </div>
                         {/* right */}
                         <div class="  text-black w-1/2 border-l border-gray-300 h-full overflow-y-scroll">

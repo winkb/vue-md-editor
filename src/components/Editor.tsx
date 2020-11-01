@@ -1,5 +1,5 @@
 import { defineComponent, onMounted, ref, watch, watchEffect } from "vue";
-import { adornTextCommand, useCodeMirror } from './use/useEditor';
+import { useAdornTextCommand, useCodeMirror } from './use/useEditor';
 
 function getEditorId() {
     return (new Date()).getTime() + "" + Math.random()
@@ -8,7 +8,6 @@ function getEditorId() {
 const EditorComponent: any = defineComponent({
     props: [
         "content",
-        "command"
     ],
     setup(props, { emit }) {
         const editorId = getEditorId()
@@ -23,16 +22,12 @@ const EditorComponent: any = defineComponent({
             emit("change", content.value)
         })
 
-        watchEffect(() => {
-            let { name, data } = props.command
-            if (!name) {
-                return
-            }
-            name && codeMirrorInstance && adornTextCommand(codeMirrorInstance, { name, data })
-        })
+        const onAdornText = function (name: string, data: any) {
+            name && useAdornTextCommand(codeMirrorInstance, { name, data })
+        }
 
         return {
-            editorId
+            editorId, onAdornText
         }
     },
     render() {
