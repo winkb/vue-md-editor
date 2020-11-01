@@ -20,9 +20,9 @@ const MkEditorComponent = defineComponent({
         }
 
         //提供给header按钮组件点击
-        provide("clickButton", (name: string, data: any) => {
+        provide("clickButton", (cmd: EditorHeaderBtnCommand) => {
             //editor需要知道命令名称和命令的数据
-            editorRef.value.onAdornText(name, data)
+            editorRef.value.onAdornText(cmd)
         })
 
         return {

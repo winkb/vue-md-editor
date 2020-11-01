@@ -22,8 +22,8 @@ const EditorComponent: any = defineComponent({
             emit("change", content.value)
         })
 
-        const onAdornText = function (name: string, data: any) {
-            name && useAdornTextCommand(codeMirrorInstance, { name, data })
+        const onAdornText = function (cmd: EditorHeaderBtnCommand) {
+            cmd.name && useAdornTextCommand(codeMirrorInstance, cmd)
         }
 
         return {
