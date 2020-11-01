@@ -1,17 +1,19 @@
+import { useClickButtonCommand } from '@/components/use/useClickCommand';
 import { defineComponent } from "vue";
-import { useClickButtonCommand } from '../../../use/useClickCommand';
 
-const FontItalicComponent = defineComponent({
+const FontSmallBlockComponent = defineComponent({
 
     setup() {
-        const useClickEvent = useClickButtonCommand("italic")
+
+        const useClickEvent = useClickButtonCommand("smallBlock")
+
         const onClick = () => {
             useClickEvent({
                 callback(ed) {
+                    var replaced = "`块`"
 
-                    var replaced = "*斜*"
-                    //-前面字符如果是*加一个空格
-                    if (ed.leftWordsIs("*")) {
+                    //-前面字符如果是'`' 就追加一个`空格`
+                    if (ed.leftWordsIs("`")) {
                         replaced = " " + replaced
                     }
 
@@ -25,9 +27,9 @@ const FontItalicComponent = defineComponent({
         }
 
         return () => (
-            <button onClick={() => onClick()} class=" button iconfont icon-xieti"></button>
+            <button onClick={() => onClick()} class=" button iconfont icon-yinyong"></button>
         )
     }
 });
 
-export default FontItalicComponent
+export default FontSmallBlockComponent 

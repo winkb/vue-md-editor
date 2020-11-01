@@ -20,9 +20,11 @@ interface CodeMirrorAdapter {
     //获取光标整行字符串
     getLineString()
     //增加一个空行，并且光标移动到空行起始位
-    addEmptyLine()
+    addEmptyLine(num: number = 1)
     //在光标当前位置插入内容
     insertContent(content: string)
+    //在行首插入内容
+    insertAtLineStart(content: string)
     //设置光标的新位置,如果line为null，选取光标当前行
     setCursor(charIndex: number, line: number = 0)
     //以当前位置为参考点，移动光标的相对位置

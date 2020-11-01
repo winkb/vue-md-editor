@@ -8,13 +8,13 @@ const FontUnderlineComponent = defineComponent({
         const onClick = () => {
             useClickEvent({
                 callback(ed) {
-                    var replaced = "<u></u>"
+                    var replaced = "<u>下</u>"
 
                     //1 在光标之前插入标识 
                     ed.insertContent(replaced)
 
                     //2 将光标移入标识中心
-                    ed.moveCursorRelative(Math.floor(replaced.length / 2))
+                    ed.moveCursorRelative(replaced.length - 4)
                 }
             })
         }

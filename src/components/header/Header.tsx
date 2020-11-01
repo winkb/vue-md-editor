@@ -8,6 +8,7 @@ import FontLinkComponent from './buttons/font-link/FontLink';
 import FontListOlComponent from './buttons/font-list-ol/FontListOl';
 import FontListUlComponent from './buttons/font-list-ul/FontListUl';
 import FontQuoteLeftComponent from './buttons/font-quote-left/FontQuoteLeft';
+import FontSmallBlockComponent from './buttons/font-small-block/FontSmallBlock';
 import FontStrikethroughComponent from './buttons/font-strikethrough/FontStrikethrough';
 import FontSubscriptComponent from './buttons/font-subscript/FontSubscript';
 import FontSuperscriptComponent from './buttons/font-superscript/FontSuperscript';
@@ -30,6 +31,7 @@ const EditorHeaderComponent = defineComponent({
                 <FontListUlComponent />
                 <FontUnderlineComponent />
                 <FontStrikethroughComponent />
+                <FontSmallBlockComponent />
                 <FontLinkComponent />
                 <FontImageComponent />
                 <FontTableComponent />

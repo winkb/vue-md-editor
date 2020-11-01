@@ -29,7 +29,10 @@ function initMarked() {
         return `<pre><code class="language-${languageClassName(language)}">${hled}</code></pre>`
     }
 
-    return marked.setOptions({ renderer })
+    return marked.setOptions({
+        renderer: renderer,
+        breaks: true,//回车换行
+    })
 }
 
 const PreviewComponent = defineComponent({

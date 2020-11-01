@@ -31,13 +31,20 @@ export default class CodeMirrorFacade implements CodeMirrorAdapter {
         this.status.index = 0
     }
 
-    addEmptyLine() {
+    addEmptyLine(num: number = 1) {
         this.execGoLineEnd()
-        this.cm.replaceSelection("\n")
-        this.status.line++
+        this.cm.replaceSelection("\n".repeat(num))
+        //修复光标的位置参数
+        this.status.index = 0
+        this.status.line += num
     }
 
     insertContent(content: string) {
+        this.cm.replaceSelection(content)
+    }
+
+    insertAtLineStart(content: string) {
+        this.execGoLineStart()
         this.cm.replaceSelection(content)
     }
 
@@ -51,6 +58,7 @@ export default class CodeMirrorFacade implements CodeMirrorAdapter {
 
     moveCursorRelative(charStep: number, lineStep?: number) {
         lineStep = lineStep == null ? 0 : lineStep;
+        console.log(this.status.index)
         this.setCursor(this.status.index + charStep, this.status.line + lineStep)
     }
 

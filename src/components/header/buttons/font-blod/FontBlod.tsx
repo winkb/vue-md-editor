@@ -9,7 +9,7 @@ const FontBlodComponent = defineComponent({
         const onClick = () => {
             useClickEvent({
                 callback: (editor) => {
-                    var replaced = "****"
+                    var replaced = "**B**"
 
                     //-前面字符如果是`*` 就追加一个`空格`
                     if (editor.leftWordsIs("*")) {
@@ -20,7 +20,7 @@ const FontBlodComponent = defineComponent({
                     editor.insertContent(replaced)
 
                     //2 将光标移入标识中心
-                    editor.moveCursorRelative(Math.ceil(replaced.length / 2))
+                    editor.moveCursorRelative(replaced.length - 2)
                 }
             })
         }

@@ -3,3 +3,12 @@
         display: block !important;
     }
 }
+
+.markdown-body{ 
+    ul{
+        list-style: disc;
+    }
+    ol{
+        list-style: decimal;
+    }
+}

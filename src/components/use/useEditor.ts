@@ -17,17 +17,8 @@ export function useAdornTextCommand(cm: any, command: EditorHeaderBtnCommand) {
 
     let cmFaced = new CodeMirrorFacade(cm)
 
-    //3. 替换文本
-    switch (command.name) {
-        case "h":
-        case "blod":
-        case "italic":
-        case "underline":
-        case "code":
-            command.callback(cmFaced, command)
-            break;
-    }
-
+    //3. 替换文本，交给自定义的扩展组件完成
+    command.callback(cmFaced, command)
     cm.focus()
 
     /* ---- 情况2. 选中文本  ***/
