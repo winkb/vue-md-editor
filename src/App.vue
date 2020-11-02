@@ -1,6 +1,5 @@
 <template>
     <MkEditorComponent :config="config" class="h-full" />
-    <ProviderComponent />
 </template>
 
 <style>
@@ -13,7 +12,6 @@ html,
 <script lang="ts">
 import { defineComponent } from "vue";
 import MkEditorComponent from "./components/MkEditor";
-import ProviderComponent from "./views/Provide";
 
 export default defineComponent({
   data() {
@@ -36,7 +34,6 @@ export default defineComponent({
   },
   components: {
     MkEditorComponent,
-    ProviderComponent,
   },
   name: "App",
 });

@@ -7,6 +7,9 @@ import { useIsPasteImageFromDisk, usePasteImage, usePasteImageInsertToEditor } f
 import { useProvideCenterHandles } from './use/useClickCommand'
 import { toRefValue } from './utils/convert'
 import EditorLoadingComponent from './Loading'
+import EditorLayoutBtnCompoent from './header/LayoutBtn'
+
+type LayoutEventName = "fenPing" | "lianDong"
 
 
 const MkEditorComponent = defineComponent({
@@ -21,9 +24,13 @@ const MkEditorComponent = defineComponent({
     setup(props) {
         let markdownContent = ref(props.content)
         let htmlContent = ref(markdownContent)
-        let editorRef: any = ref(null)
+        let editorRef = ref("")
+        let previewBoxRef = ref("")
         let state = reactive({
-            isLoading: false
+            isLoading: false,
+            lianDong: true,
+            fenPing: true,
+            scollY: 0,
         })
 
         //接收父组件配置的上传服务器的方法
@@ -57,6 +64,14 @@ const MkEditorComponent = defineComponent({
                 useIsPasteImageFromDisk(e) && setTimeout(() => cm.execUndo(), 2)
 
                 handlePasteUpload(cm, fileBlob)
+            },
+            scroll(cm: CodeMirrorAdapter) {//监听滚动条
+                let { y } = cm.getScollXY()
+                let pDom = toRefValue(previewBoxRef)
+                //存储Editor滚动条Top值
+                state.scollY = y
+
+                if (state.lianDong) pDom.scrollTop = y
             }
         })
 
@@ -73,12 +88,26 @@ const MkEditorComponent = defineComponent({
             htmlContent.value = newContent
         }
 
+        //监听布局按钮的点击事件
+        const onLayoutChange = (name: LayoutEventName) => {
+            state[name] = !state[name]
+
+            //取消分屏，联动自动取消
+            state.fenPing || (state.lianDong = false)
+            //设置预览滚动条Top值
+            state.lianDong && (toRefValue(previewBoxRef).scrollTop = state.scollY)
+        }
+
         return {
-            htmlContent, markdownContent, editorRef, state
+            htmlContent, markdownContent, editorRef, state, onLayoutChange, previewBoxRef
         }
     },
     render() {
-        let loadingHtml = this.state.isLoading ? (<EditorLoadingComponent />) : ("");
+        const loadingHtml = this.state.isLoading ? (<EditorLoadingComponent />) : ("");
+        const previewBoxClass = this.state.fenPing ? "w-1/2" : "hidden"
+        const layoutHtml = (
+            <EditorLayoutBtnCompoent changeEvent={this.onLayoutChange} fenPing={this.state.fenPing} lianDong={this.state.lianDong} />
+        )
 
         return (
             <div class="w-full h-full p-3 markdown-editor">
@@ -86,22 +115,28 @@ const MkEditorComponent = defineComponent({
                     {/* progress遮罩 */}
                     {loadingHtml}
                     {/* top */}
-                    <div class="md:h-16 w-full border-b">
-                        <EditorHeaderComponent />
+                    <div class="md:h-16 flex flex-col md:flex-row w-full border-b">
+                        {/* 功能性按钮 */}
+                        <div class="flex flex-1 md:h-full">
+                            <EditorHeaderComponent />
+                        </div>
+                        {/* 布局配置按钮 */}
+                        <div class="md:w-64 md:h-full border-l border-gray-200 overflow-hidden">
+                            {layoutHtml}
+                        </div>
                     </div>
                     {/* body */}
                     <div class="w-full flex flex-1 justify-center h-64 ">
                         {/* left */}
-                        <div class=" text-black w-1/2 overflow-x-hidden break-words break-all">
+                        <div class=" text-black flex-1  overflow-x-hidden break-words break-all">
                             <EditorComponent ref="editorRef" content={this.markdownContent} />
                         </div>
                         {/* right */}
-                        <div class="  text-black w-1/2 border-l border-gray-300 h-full overflow-y-scroll">
+                        <div ref="previewBoxRef" class={" text-black  border-l border-gray-300 h-full overflow-y-scroll " + previewBoxClass}>
                             <PreviewComponent content={this.htmlContent} />
                         </div>
                     </div>
                 </div>
-
             </div>
         )
     }

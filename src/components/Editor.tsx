@@ -5,14 +5,14 @@ function getEditorId() {
     return (new Date()).getTime() + "" + Math.random()
 }
 
-const EditorComponent: any = defineComponent({
+const EditorComponent = defineComponent({
     props: [
         "content",
     ],
     setup(props) {
         const editorId = getEditorId()
         let content = ref(props.content ? props.content : "")
-        let codeMirrorInstance: any
+        let codeMirrorInstance: CodeMirrorAdapter
 
         onMounted(() => {
             codeMirrorInstance = useCodeMirror(editorId, content, inject("event"))

@@ -1,4 +1,4 @@
-import { defineComponent, isRef, Ref, ref, watchEffect } from "vue";
+import { defineComponent, Ref, ref, watchEffect } from "vue";
 import marked from "marked";
 import Prism from "prismjs";
 import "../assets/css/prism.scss"
@@ -34,7 +34,7 @@ function initMarked() {
 
 const PreviewComponent = defineComponent({
     props: [
-        "content"
+        "content",
     ],
     setup(props) {
         let htmlContent = ref()

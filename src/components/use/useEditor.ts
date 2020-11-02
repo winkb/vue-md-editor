@@ -50,7 +50,7 @@ export function usePasteImage(e: any): undefined | Blob {
         return
     }
 
-    let item = e.clipborardObj.items[0]
+    let item = clipborardObj.items[0]
 
     if (!(/^image\//i).test(item.type)) {
         return
@@ -100,9 +100,8 @@ export function useCodeMirror(editorId: string, content: Ref, events?: { [key: s
     if (events) {
         Object.keys(events).forEach(name => {
             myCodeMirror.on(name,
-                (...args: any[]) => {
-                    args.unshift(new CodeMirrorFacade(args.shift()))
-                    events[name].apply(null, args)
+                (cm: any, ...args: any[]) => {
+                    events[name].apply(null, [new CodeMirrorFacade(cm), ...args])
                 })
         })
     }

@@ -64,6 +64,11 @@ export default class CodeMirrorFacade implements CodeMirrorAdapter {
         return curLineChars.substr(this.status.index + 1, this.status.index + 1 + word.length) == word
     }
 
+    getScollXY() {
+        let { left, top } = this.cm.getScrollInfo()
+        return { x: left, y: top }
+    }
+
     lineStartRemove(len: number) {
         this.cm.replaceRange("",
             { line: this.status.line, ch: 0 },
