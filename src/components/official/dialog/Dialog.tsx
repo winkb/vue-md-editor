@@ -13,9 +13,7 @@ const EdirotDialogComponent: any = defineComponent({
     setup(props, { emit }) {
         let isOpen = ref(false)
 
-        const open = () => {
-            isOpen.value = true
-        }
+        const open = () => isOpen.value = true
 
         const close = () => {
             isOpen.value = false
@@ -27,11 +25,7 @@ const EdirotDialogComponent: any = defineComponent({
         })
 
         let modalWrapperClass = computed(() => {
-            console.log(isOpen.value)
-            if (isOpen.value) {
-                return "modal-wrapper modal-is-open"
-            }
-            return "modal-wrapper "
+            return (isOpen.value) ? "modal-wrapper modal-is-open" : "modal-wrapper "
         })
 
         watch(() => props.is_open, () => {
