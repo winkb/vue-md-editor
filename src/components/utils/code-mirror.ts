@@ -12,6 +12,10 @@ export default class CodeMirrorFacade implements CodeMirrorAdapter {
         this.status.index = cursor.ch
     }
 
+    getValue() {
+        return this.cm.getValue()
+    }
+
     isCurLineHasWord() {
         return this.getLineString().length > 0
     }
@@ -47,7 +51,6 @@ export default class CodeMirrorFacade implements CodeMirrorAdapter {
 
     moveCursorRelative(charStep: number, lineStep?: number) {
         lineStep = lineStep == null ? 0 : lineStep;
-        console.log(this.status.index)
         this.setCursor(this.status.index + charStep, this.status.line + lineStep)
     }
 

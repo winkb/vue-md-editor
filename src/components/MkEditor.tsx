@@ -3,10 +3,9 @@ import EditorComponent from './Editor'
 import EditorHeaderComponent from './header/Header'
 import PreviewComponent from './Preview'
 import "./editor.scss"
-import { usePasteImage, usePasteImageInsertToEditor } from './use/useEditor'
+import { useIsPasteImageFromDisk, usePasteImage, usePasteImageInsertToEditor } from './use/useEditor'
 import { useProvideCenterHandles } from './use/useClickCommand'
 import { toRefValue } from './utils/convert'
-
 
 const MkEditorComponent = defineComponent({
     props: {
@@ -21,10 +20,13 @@ const MkEditorComponent = defineComponent({
         let markdownContent = ref(props.content)
         let htmlContent = ref(markdownContent)
         let editorRef: any = ref(null)
+        // let copyFromDistHook
         const centerHandles: EditorCenterHandles = {
             upload(fileBlob) {
                 return new Promise(r => {
-                    r({ path: "https://pic1.zhimg.com/80/v2-2655b868e875f5c76de3e7e4fae118c6_1440w.jpg?source=1940ef5c" })
+                    setTimeout(
+                        () => r({ path: "https://pic1.zhimg.com/80/v2-2655b868e875f5c76de3e7e4fae118c6_1440w.jpg?source=1940ef5c" })
+                        , 10)
                 })
             }
         }
@@ -39,8 +41,17 @@ const MkEditorComponent = defineComponent({
 
         //提供给编辑器的监听事件
         provide("event", {
-            paste: (cm: CodeMirrorAdapter, e: any) => {
+            change: (cm: CodeMirrorAdapter) => {
+                onMarkdownChange(cm.getValue())
+            },
+            paste: (cm: CodeMirrorAdapter, e: any, b: any) => {
                 let fileBlob = usePasteImage(e)
+
+                //- 从磁盘上复制的文件要回退，因为ed默认插入了文件名，而我们不需要
+                if (fileBlob && useIsPasteImageFromDisk(e)) {
+                    setTimeout(() => cm.execUndo(), 2)
+                }
+
                 fileBlob && handlePasteUpload(cm, fileBlob)
             }
         })
@@ -53,11 +64,13 @@ const MkEditorComponent = defineComponent({
 
         //监听内容变化，发送给预览组件
         const onMarkdownChange = (newContent: string) => {
-            if (typeof newContent == "string") htmlContent.value = newContent
+            if (typeof newContent != "string") return;
+
+            htmlContent.value = newContent
         }
 
         return {
-            htmlContent, markdownContent, onMarkdownChange, editorRef
+            htmlContent, markdownContent, editorRef
         }
     },
     render() {
@@ -73,7 +86,7 @@ const MkEditorComponent = defineComponent({
                     <div class=" w-full flex flex-1 justify-center h-64 ">
                         {/* left */}
                         <div class=" text-black w-1/2 overflow-x-hidden break-words break-all">
-                            <EditorComponent ref="editorRef" onChange={this.onMarkdownChange} content={this.markdownContent} />
+                            <EditorComponent ref="editorRef" content={this.markdownContent} />
                         </div>
                         {/* right */}
                         <div class="  text-black w-1/2 border-l border-gray-300 h-full overflow-y-scroll">

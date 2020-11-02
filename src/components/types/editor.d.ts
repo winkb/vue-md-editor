@@ -19,6 +19,8 @@ interface EditorUploadHandleInterface {
 }
 
 interface CodeMirrorAdapter {
+    //获取内容
+    getValue(): string
     //当前行是否有内容
     isCurLineHasWord(): boolean
     //判断光标`左边的字符串

@@ -24,23 +24,33 @@ export function useAdornTextCommand(cm: any, command: EditorHeaderBtnCommand) {
     /* ---- 情况2. 选中文本  ***/
 }
 
+export function useIsPasteImageFromDisk(e: any): Boolean {
+    if (!e.clipboardData.items.length) {
+        return false
+    }
+
+    let item = e.clipboardData.items[0]
+
+    return e.clipboardData.files.length && item.kind == "string"
+}
+
 //获取编辑器粘贴的图片对象
 export function usePasteImage(e: any): undefined | Blob {
     if (!e || !e.clipboardData) {
         return
     }
 
-    let clipbordData = e.clipboardData
+    let clipborardObj = e.clipboardData
 
-    if (clipbordData.files && clipbordData.files.length) {
-        return clipbordData.files[0]
+    if (clipborardObj.files && clipborardObj.files.length) {
+        return clipborardObj.files[0]
     }
 
-    if (!clipbordData.items || !clipbordData.items.length) {
+    if (!clipborardObj.items || !clipborardObj.items.length) {
         return
     }
 
-    let item = e.clipboardData.items[0]
+    let item = e.clipborardObj.items[0]
 
     if (!(/^image\//i).test(item.type)) {
         return
@@ -87,16 +97,13 @@ export function useCodeMirror(editorId: string, content: Ref, events?: { [key: s
 
     myCodeMirror.setSize('auto', '100%');
 
-    myCodeMirror.on("change", function (cm: any) {
-        content.value = cm.getValue()
-    })
-
     if (events) {
         Object.keys(events).forEach(name => {
             myCodeMirror.on(name,
-                (cm: any, e: any) => events[name].apply(null,
-                    [new CodeMirrorFacade(cm), e]
-                ))
+                (...args: any[]) => {
+                    args.unshift(new CodeMirrorFacade(args.shift()))
+                    events[name].apply(null, args)
+                })
         })
     }
 
