@@ -6,6 +6,7 @@ import "./editor.scss"
 import { useIsPasteImageFromDisk, usePasteImage, usePasteImageInsertToEditor } from './use/useEditor'
 import { useProvideCenterHandles } from './use/useClickCommand'
 import { toRefValue } from './utils/convert'
+import EditorLoadingComponent from './Loading'
 
 
 const MkEditorComponent = defineComponent({
@@ -79,23 +80,13 @@ const MkEditorComponent = defineComponent({
         }
     },
     render() {
-        let loadingHtml = (
-            <div class="absolute flex flex-col items-center z-50 justify-center w-full h-full bg-black bg-opacity-25" >
-                <div class="text-sm mb-1 text-orange-800">
-                    图片正在上传中...
-                </div>
-                <div class="rounded-full animate-spin opacity-50  bg-gradient-to-r from-black to-white   h-12 w-12 flex items-center justify-center">
-                    <div class="rounded-full bg-white bg-opacity h-10 w-10 flex items-center justify-center text-white text-xs">
-                    </div>
-                </div>
-            </div>
-        )
+        let loadingHtml = this.state.isLoading ? (<EditorLoadingComponent />) : ("");
 
         return (
             <div class="w-full h-full p-3 markdown-editor">
                 <div class=" bg-white relative w-full h-full flex border flex-col shadow p-0 rounded ">
                     {/* progress遮罩 */}
-                    {this.state.isLoading ? loadingHtml : ""}
+                    {loadingHtml}
                     {/* top */}
                     <div class="md:h-16 w-full border-b">
                         <EditorHeaderComponent />
