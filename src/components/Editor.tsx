@@ -1,4 +1,4 @@
-import { defineComponent, onMounted, ref, watch, watchEffect } from "vue";
+import { defineComponent, inject, onMounted, ref, watch, watchEffect } from "vue";
 import { useAdornTextCommand, useCodeMirror } from './use/useEditor';
 
 function getEditorId() {
@@ -15,7 +15,7 @@ const EditorComponent: any = defineComponent({
         let codeMirrorInstance: any
 
         onMounted(() => {
-            codeMirrorInstance = useCodeMirror(editorId, content)
+            codeMirrorInstance = useCodeMirror(editorId, content, inject("event"))
         })
 
         watch(content, () => {

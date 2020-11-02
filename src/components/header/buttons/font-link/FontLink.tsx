@@ -14,25 +14,21 @@ const FontLinkComponent = defineComponent({
         }
         const dispatchEvent = (title: string, link: string) => {
             useClickEvent({
-                callback: (editor) => {
+                callback: (ed) => {
                     title = title ? title : link
 
                     var replaced = `[${title}](${link})`
 
                     //1 在光标之前插入标识 
-                    editor.insertContent(replaced)
+                    ed.insertContent(replaced)
 
                     //2 将光标移入标识中心
-                    editor.moveCursorRelative(replaced.length)
+                    ed.moveCursorRelative(replaced.length)
                 }
             })
         }
 
         const dialog: any = ref(null)
-
-        const onCancel = () => {
-            dialog.value.close()
-        }
 
         const onSubmit = (form: any) => {
             dialog.value.close()
@@ -40,7 +36,7 @@ const FontLinkComponent = defineComponent({
         }
 
         //提供给表单子组件用的方法
-        provide("onCancel", onCancel)
+        provide("onCancel", () => dialog.value.close())
         provide("onSubmit", onSubmit)
 
         const formSlot = {

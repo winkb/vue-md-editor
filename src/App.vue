@@ -1,5 +1,6 @@
 <template>
     <MkEditorComponent class="h-full" />
+    <ProviderComponent />
 </template>
 
 <style>
@@ -12,9 +13,13 @@ html,
 <script lang="ts">
 import { defineComponent } from "vue";
 import MkEditorComponent from "./components/MkEditor";
+import ProviderComponent from "./views/Provide";
 
 export default defineComponent({
-  components: { MkEditorComponent },
+  components: {
+    MkEditorComponent,
+    ProviderComponent,
+  },
   name: "App",
 });
 </script>

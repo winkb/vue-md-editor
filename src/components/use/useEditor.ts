@@ -24,7 +24,43 @@ export function useAdornTextCommand(cm: any, command: EditorHeaderBtnCommand) {
     /* ---- 情况2. 选中文本  ***/
 }
 
-export function useCodeMirror(editorId: string, content: Ref) {
+//获取编辑器粘贴的图片对象
+export function usePasteImage(e: any): undefined | Blob {
+    if (!e || !e.clipboardData) {
+        return
+    }
+
+    let clipbordData = e.clipboardData
+
+    if (clipbordData.files && clipbordData.files.length) {
+        return clipbordData.files[0]
+    }
+
+    if (!clipbordData.items || !clipbordData.items.length) {
+        return
+    }
+
+    let item = e.clipboardData.items[0]
+
+    if (!(/^image\//i).test(item.type)) {
+        return
+    }
+
+    return item.getAsFile()
+}
+
+export function usePasteImageInsertToEditor(ed: CodeMirrorAdapter, title: string, link: string) {
+    title = title ? title : link.substring(0, 6)
+    var replaced = `![${title}](${link})`
+
+    //1 在光标之前插入标识 
+    ed.insertContent(replaced)
+
+    //2 将光标移入标识中心
+    ed.moveCursorRelative(replaced.length)
+}
+
+export function useCodeMirror(editorId: string, content: Ref, events?: { [key: string]: Function }) {
     const myCodeMirror = CodeMirror(
         document.getElementById(editorId),
         {
@@ -54,6 +90,15 @@ export function useCodeMirror(editorId: string, content: Ref) {
     myCodeMirror.on("change", function (cm: any) {
         content.value = cm.getValue()
     })
+
+    if (events) {
+        Object.keys(events).forEach(name => {
+            myCodeMirror.on(name,
+                (cm: any, e: any) => events[name].apply(null,
+                    [new CodeMirrorFacade(cm), e]
+                ))
+        })
+    }
 
     return myCodeMirror
 }

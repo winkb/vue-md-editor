@@ -8,6 +8,16 @@ interface EditorHeaderBtnCommand {
     callback: EditorBtnCommandCaller
 }
 
+//文件上传处理函数
+type EditorCenterHandles = {
+    upload: EditorUploadHandleInterface
+}
+
+//文件上传处理函数
+interface EditorUploadHandleInterface {
+    (fileBlob: Blob): Promise<{ path: string }>
+}
+
 interface CodeMirrorAdapter {
     //当前行是否有内容
     isCurLineHasWord(): boolean

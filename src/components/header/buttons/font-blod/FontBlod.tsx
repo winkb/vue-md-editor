@@ -8,19 +8,19 @@ const FontBlodComponent = defineComponent({
         const useClickEvent = useClickButtonCommand("blod")
         const onClick = () => {
             useClickEvent({
-                callback: (editor) => {
+                callback: (ed) => {
                     var replaced = "**B**"
 
                     //-前面字符如果是`*` 就追加一个`空格`
-                    if (editor.leftWordsIs("*")) {
+                    if (ed.leftWordsIs("*")) {
                         replaced = " " + replaced
                     }
 
                     //1 在光标之前插入标识 
-                    editor.insertContent(replaced)
+                    ed.insertContent(replaced)
 
                     //2 将光标移入标识中心
-                    editor.moveCursorRelative(replaced.length - 2)
+                    ed.moveCursorRelative(replaced.length - 2)
                 }
             })
         }

@@ -8,7 +8,7 @@ const FontSuperscriptComponent = defineComponent({
         const onClick = () => {
             useClickEvent({
                 callback: (ed) => {
-                    var replaced = "<sup>标</sup>"
+                    var replaced = "<sup>角</sup>"
 
                     //1 在光标之前插入标识 
                     ed.insertContent(replaced)

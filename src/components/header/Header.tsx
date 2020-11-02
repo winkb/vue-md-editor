@@ -18,8 +18,6 @@ import FontUnderlineComponent from './buttons/font-underline/FontUnderline';
 
 
 const EditorHeaderComponent = defineComponent({
-    setup(props, { emit }) {
-    },
     render() {
         return (
             <div class="header flex flex-wrap items-center h-full w-full">
