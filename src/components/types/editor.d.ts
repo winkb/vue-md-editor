@@ -11,6 +11,7 @@ interface EditorHeaderBtnCommand {
 //文件上传处理函数
 type EditorCenterHandles = {
     upload: EditorUploadHandleInterface
+    clickButton: (cmd: EditorHeaderBtnCommand)
 }
 
 //文件上传处理函数

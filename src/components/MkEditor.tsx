@@ -1,4 +1,4 @@
-import { defineComponent, provide, reactive, Ref, ref, toRef, toRefs, watch, watchEffect } from 'vue'
+import { defineComponent, provide, reactive, ref } from 'vue'
 import EditorComponent from './Editor'
 import EditorHeaderComponent from './header/Header'
 import PreviewComponent from './Preview'
@@ -35,16 +35,14 @@ const MkEditorComponent = defineComponent({
                 return uploadApi(fileBlob).finally(() => {
                     state.isLoading = false
                 })
+            },
+            clickButton(cmd) {//提供给header按钮组件点击
+                //editor需要知道命令名称和命令的数据
+                toRefValue(editorRef).onAdornText(cmd)
             }
         }
         //提供一些基础方法给(子组件/扩展组件)使用
         useProvideCenterHandles(centerHandles)
-
-        //提供给header按钮组件点击
-        provide("clickButton", (cmd: EditorHeaderBtnCommand) => {
-            //editor需要知道命令名称和命令的数据
-            toRefValue(editorRef).onAdornText(cmd)
-        })
 
         //提供给编辑器的监听事件
         provide("event", {

@@ -2,7 +2,7 @@ import { inject, provide } from "vue";
 import { toAny } from '../utils/convert';
 
 export function useClickButtonCommand(name: string) {
-    let clickButtonEvent: any = inject("clickButton")
+    let clickButtonEvent = useInjectCenterHandles().clickButton
 
     const clickButton = (cmd: EditorHeaderBtnCommand) => {
         cmd.name = name
