@@ -2,7 +2,6 @@ import { defineComponent } from "vue";
 import { useClickButtonCommand } from '../../../use/useClickCommand';
 
 const FontUnderlineComponent = defineComponent({
-
     setup() {
         const useClickEvent = useClickButtonCommand("underline")
         const onClick = () => {

@@ -5,7 +5,6 @@ import { defineComponent, provide, ref } from "vue";
 import FontImageFormComponent from './Form';
 
 const FontImageComponent = defineComponent({
-
     setup() {
         const dialog: any = ref(null)
         const fileInputRef = ref(null)

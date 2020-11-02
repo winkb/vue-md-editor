@@ -20,17 +20,6 @@ export default class CodeMirrorFacade implements CodeMirrorAdapter {
         return this.cm.getLine(this.status.line)
     }
 
-    execGoLineEnd() {
-        this.cm.execCommand("goLineEnd")
-        this.status.index = Math.max(this.getLineString().length - 1, 0)
-    }
-
-    execGoLineStart() {
-        if (this.status.index == 0) return
-        this.cm.execCommand("goLineStart")
-        this.status.index = 0
-    }
-
     addEmptyLine(num: number = 1) {
         this.execGoLineEnd()
         this.cm.replaceSelection("\n".repeat(num))
@@ -79,4 +68,22 @@ export default class CodeMirrorFacade implements CodeMirrorAdapter {
         )
     }
 
+    execGoLineEnd() {
+        this.cm.execCommand("goLineEnd")
+        this.status.index = Math.max(this.getLineString().length - 1, 0)
+    }
+
+    execGoLineStart() {
+        if (this.status.index == 0) return
+        this.cm.execCommand("goLineStart")
+        this.status.index = 0
+    }
+
+    execUndo() {
+        this.cm.execCommand("undo")
+    }
+
+    execRedo() {
+        this.cm.execCommand("redo")
+    }
 }

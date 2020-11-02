@@ -2,13 +2,10 @@ import { defineComponent, isRef, Ref, ref, watchEffect } from "vue";
 import marked from "marked";
 import Prism from "prismjs";
 import "../assets/css/prism.scss"
-
-function useRefValue(refObj: Ref | String) {
-    return isRef(refObj) ? refObj.value : refObj
-}
+import { toRefValue } from './utils/convert';
 
 function useMarked(refObj: Ref | String) {
-    return marked(useRefValue(refObj));
+    return marked(toRefValue(refObj));
 }
 
 function languageClassName(language: string) {

@@ -43,4 +43,8 @@ interface CodeMirrorAdapter {
     execGoLineEnd()
     //光标移动到行首
     execGoLineStart()
+    //撤销
+    execUndo()
+    //反撤销
+    execRedo()
 }

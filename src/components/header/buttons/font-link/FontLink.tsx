@@ -4,7 +4,6 @@ import { defineComponent, provide, ref } from "vue";
 import FontLinkFormComponent from './Form';
 
 const FontLinkComponent = defineComponent({
-
     setup() {
 
         const useClickEvent = useClickButtonCommand("blod")

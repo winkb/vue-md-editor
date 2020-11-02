@@ -2,7 +2,6 @@ import { useClickButtonCommand } from '@/components/use/useClickCommand';
 import { defineComponent } from "vue";
 
 const FontTackComponent = defineComponent({
-
     setup() {
         const useClickEvent = useClickButtonCommand("tack")
         const onClick = () => {

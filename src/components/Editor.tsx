@@ -1,5 +1,6 @@
-import { defineComponent, inject, onMounted, ref, watch, watchEffect } from "vue";
+import { defineComponent, inject, onMounted, ref, toRef, watch, watchEffect } from "vue";
 import { useAdornTextCommand, useCodeMirror } from './use/useEditor';
+import { toRefValue } from './utils/convert';
 
 function getEditorId() {
     return (new Date()).getTime() + "" + Math.random()
@@ -19,7 +20,7 @@ const EditorComponent: any = defineComponent({
         })
 
         watch(content, () => {
-            emit("change", content.value)
+            emit("change", toRefValue(content))
         })
 
         const onAdornText = function (cmd: EditorHeaderBtnCommand) {

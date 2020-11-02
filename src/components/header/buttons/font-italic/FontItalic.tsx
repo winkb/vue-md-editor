@@ -2,7 +2,6 @@ import { defineComponent } from "vue";
 import { useClickButtonCommand } from '../../../use/useClickCommand';
 
 const FontItalicComponent = defineComponent({
-
     setup() {
         const useClickEvent = useClickButtonCommand("italic")
         const onClick = () => {

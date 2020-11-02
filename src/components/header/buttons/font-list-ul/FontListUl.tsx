@@ -2,7 +2,6 @@ import { useClickButtonCommand } from '@/components/use/useClickCommand';
 import { defineComponent } from "vue";
 
 const FontListUlComponent = defineComponent({
-
     setup() {
         const useClickEvent = useClickButtonCommand("listUl")
         const onClick = () => {

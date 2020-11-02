@@ -2,7 +2,6 @@ import { useClickButtonCommand } from '@/components/use/useClickCommand';
 import { defineComponent } from "vue";
 
 const FontSubscriptComponent = defineComponent({
-
     setup() {
         const useClickEvent = useClickButtonCommand("subscript")
         const onClick = () => {

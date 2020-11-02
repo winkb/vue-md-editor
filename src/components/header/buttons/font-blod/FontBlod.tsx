@@ -2,7 +2,6 @@ import { defineComponent } from "vue";
 import { useClickButtonCommand } from '../../../use/useClickCommand';
 
 const FontBlodComponent = defineComponent({
-
     setup() {
 
         const useClickEvent = useClickButtonCommand("blod")

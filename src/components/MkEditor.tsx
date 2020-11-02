@@ -5,6 +5,7 @@ import PreviewComponent from './Preview'
 import "./editor.scss"
 import { usePasteImage, usePasteImageInsertToEditor } from './use/useEditor'
 import { useProvideCenterHandles } from './use/useClickCommand'
+import { toRefValue } from './utils/convert'
 
 
 const MkEditorComponent = defineComponent({
@@ -33,7 +34,7 @@ const MkEditorComponent = defineComponent({
         //提供给header按钮组件点击
         provide("clickButton", (cmd: EditorHeaderBtnCommand) => {
             //editor需要知道命令名称和命令的数据
-            editorRef.value.onAdornText(cmd)
+            toRefValue(editorRef).onAdornText(cmd)
         })
 
         //提供给编辑器的监听事件

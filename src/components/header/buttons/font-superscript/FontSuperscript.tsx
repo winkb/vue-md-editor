@@ -2,7 +2,6 @@ import { useClickButtonCommand } from '@/components/use/useClickCommand';
 import { defineComponent } from "vue";
 
 const FontSuperscriptComponent = defineComponent({
-
     setup() {
         const useClickEvent = useClickButtonCommand("superscript")
         const onClick = () => {

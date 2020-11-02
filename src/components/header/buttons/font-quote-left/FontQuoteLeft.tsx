@@ -2,7 +2,6 @@ import { useClickButtonCommand } from '@/components/use/useClickCommand';
 import { defineComponent } from "vue";
 
 const FontQuoteLeftComponent = defineComponent({
-
     setup() {
 
         const useClickEvent = useClickButtonCommand("quoteLeft")
