@@ -3,11 +3,17 @@ import marked from "marked";
 import Prism from "prismjs";
 import "../assets/css/prism.scss"
 import { toRefValue } from './utils/convert';
-import { useThrottle } from '@vueuse/core'
+import { useClipboard, useThrottle } from '@vueuse/core'
 
 function initMarked() {
     // 新建渲染器
     const renderer = new marked.Renderer()
+    const { copy } = useClipboard()
+    let w: any = window
+
+    w.onCopy = (code: string) => {
+        copy(code)
+    }
 
     renderer.code = (code: string, language: string, isEscaped: boolean) => {
         let hled = Prism.highlight(
@@ -16,7 +22,10 @@ function initMarked() {
             language
         )
 
-        return `<pre><code class="language-${language}">${hled}</code></pre>`
+        const btnHtml = `<span onClick="onCopy(\`${code}\`)" class="py-0 px-2 bg-orange-300 rounded code-copy-button icon iconfont icon-copy hidden cursor-pointer text-white hover:text-green-500 text-xl absolute"></span>`
+        const codeHtml = `<pre><code class="language-${language}">${hled}</code></pre>`
+
+        return `<div class="hover-hidden-open relative" >${btnHtml}${codeHtml}</div>`
     }
 
     return marked.setOptions({
@@ -37,7 +46,6 @@ const PreviewComponent = defineComponent({
 
         const markedContent = (content: any) => {
             htmlContent.value = marked(toRefValue(content))
-            console.log(content)
         }
 
         //防抖
