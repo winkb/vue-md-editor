@@ -1,5 +1,5 @@
 import EdirotDialogComponent from '@/components/official/dialog/Dialog';
-import { useClickButtonCommand, useInjectCenterHandles } from '@/components/use/useClickCommand';
+import { useClickButtonCommand, useInjectCenterHandles } from '@/components/use/useEvent';
 import { toAny } from '@/components/utils/convert';
 import { defineComponent, provide, ref } from "vue";
 import FontImageFormComponent from './Form';

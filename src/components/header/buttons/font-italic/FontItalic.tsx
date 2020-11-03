@@ -1,5 +1,5 @@
 import { defineComponent } from "vue";
-import { useClickButtonCommand } from '../../../use/useClickCommand';
+import { useClickButtonCommand } from '../../../use/useEvent';
 
 const FontItalicComponent = defineComponent({
     setup() {

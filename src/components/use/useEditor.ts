@@ -9,15 +9,11 @@ import CodeMirrorFacade from '../utils/code-mirror';
 export function useAdornTextCommand(cm: any, command: EditorHeaderBtnCommand) {
     /* ---- 情况1. 没有选中文本 ***/
 
-    //1. 获取光标位置 
-    //2. 检查光标前后字符串
-    //3. 计算替换的起始位置和结束位置
-
     console.log("添加语法修饰片段", command.name)
 
     let cmFaced = new CodeMirrorFacade(cm)
 
-    //3. 替换文本，交给自定义的扩展组件完成
+    //1. 替换文本，交给自定义的扩展组件完成
     command.callback(cmFaced, command)
     cm.focus()
 
@@ -32,6 +28,21 @@ export function useIsPasteImageFromDisk(e: any): Boolean {
     let item = e.clipboardData.items[0]
 
     return e.clipboardData.files.length && item.kind == "string"
+}
+
+/**
+ * 计算分屏数值
+ * @param c 当前值
+ * @param last 上次保留值 
+ * @param v 期望值 
+ * @param [实际值, 保留值]
+ */
+export function useScreenTypeValue(c: number, last: number, v: number) {
+    if (v == 3 && c == 3) {
+        return last
+    }
+
+    return v
 }
 
 //获取编辑器粘贴的图片对象

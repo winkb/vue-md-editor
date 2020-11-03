@@ -1,16 +1,14 @@
-import { defineComponent, provide, reactive, ref } from 'vue'
+import { defineComponent, inject, reactive, ref, watch } from 'vue'
 import EditorComponent from './Editor'
 import EditorHeaderComponent from './header/Header'
 import PreviewComponent from './Preview'
 import "./editor.scss"
-import { useIsPasteImageFromDisk, usePasteImage, usePasteImageInsertToEditor } from './use/useEditor'
-import { useProvideCenterHandles } from './use/useClickCommand'
+import { useEditorEventsListener, useProvideCenterHandles } from './use/useEvent'
 import { toRefValue } from './utils/convert'
 import EditorLoadingComponent from './Loading'
 import EditorLayoutBtnCompoent from './header/LayoutBtn'
 
-type LayoutEventName = "fenPing" | "lianDong"
-
+type LayoutEventName = "thisScreen" | "lianDong"
 
 const MkEditorComponent = defineComponent({
     props: {
@@ -22,81 +20,53 @@ const MkEditorComponent = defineComponent({
         }
     },
     setup(props) {
-        let markdownContent = ref(props.content)
-        let htmlContent = ref(markdownContent)
-        let editorRef = ref("")
-        let previewBoxRef = ref("")
         let state = reactive({
             isLoading: false,
             lianDong: true,
-            fenPing: true,
+            thisScreen: 2,//1全屏 2分屏  3预览
+            lastScreen: 2,
             scollY: 0,
         })
-
+        let editorRef = ref("")
+        let previewBoxRef = ref("")
+        let htmlContent = ref(props.content)
+        let markdownContent = ref(props.content)
         //接收父组件配置的上传服务器的方法
         let uploadApi = props.config?.upload || (() => new Promise(r => r(console.error("上传文件:没有处理函数"))))
 
-        const centerHandles: EditorCenterHandles = {
-            upload: async (fileBlob) => {//上传都会先走这里
-                state.isLoading = true
-                return uploadApi(fileBlob).finally(() => {
-                    state.isLoading = false
-                })
-            },
-            clickButton(cmd) {//提供给header按钮组件点击
-                //editor需要知道命令名称和命令的数据
-                toRefValue(editorRef).onAdornText(cmd)
-            }
-        }
-        //提供一些基础方法给(子组件/扩展组件)使用
-        useProvideCenterHandles(centerHandles)
-
-        //提供给编辑器的监听事件
-        provide("event", {
-            change: (cm: CodeMirrorAdapter) => {
-                onMarkdownChange(cm.getValue())
-            },
-            paste: (cm: CodeMirrorAdapter, e: any, b: any) => {
-                let fileBlob = usePasteImage(e)
-                if (!fileBlob) return
-
-                //- 从磁盘上复制的文件要回退，因为ed默认插入了文件名，而我们不需要
-                useIsPasteImageFromDisk(e) && setTimeout(() => cm.execUndo(), 2)
-
-                handlePasteUpload(cm, fileBlob)
-            },
-            scroll(cm: CodeMirrorAdapter) {//监听滚动条
-                let { y } = cm.getScollXY()
-                let pDom = toRefValue(previewBoxRef)
-                //存储Editor滚动条Top值
-                state.scollY = y
-
-                if (state.lianDong) pDom.scrollTop = y
-            }
-        })
-
-        //图片上传处理
-        const handlePasteUpload = async (cm: CodeMirrorAdapter, fileBlob: Blob) => {
-            let { path } = await centerHandles.upload(fileBlob)
-            usePasteImageInsertToEditor(cm, "图片", path)
-        }
-
-        //监听内容变化，发送给预览组件
-        const onMarkdownChange = (newContent: string) => {
-            if (typeof newContent != "string") return;
-
-            htmlContent.value = newContent
-        }
-
         //监听布局按钮的点击事件
-        const onLayoutChange = (name: LayoutEventName) => {
-            state[name] = !state[name]
+        const onLayoutChange = (name: LayoutEventName, v: number) => {
+            name == "lianDong" && (state.lianDong = !state.lianDong)
+            name == "thisScreen" && (v == -1 ? (state.thisScreen = state.lastScreen) : (state.thisScreen = v))
+            name == "thisScreen" && v != 3 && (state.lastScreen = state.thisScreen)
 
-            //取消分屏，联动自动取消
-            state.fenPing || (state.lianDong = false)
+            //取消分屏，自动取消联动
+            state.thisScreen != 2 && (state.lianDong = false)
             //设置预览滚动条Top值
             state.lianDong && (toRefValue(previewBoxRef).scrollTop = state.scollY)
         }
+
+        //提供一些基础方法给(子组件/扩展组件)使用
+        const { sonComState, centerHandles } = useProvideCenterHandles(uploadApi)
+
+        //注册Editor事件响应处理函数
+        const edStatus = useEditorEventsListener(centerHandles)
+
+        //观察Progress状态
+        watch(() => sonComState.isLoading, () => state.isLoading = sonComState.isLoading)
+
+        //观察Header按钮发出来的指令---触发Editor命令，回调内容修饰函数
+        watch(() => sonComState.cmd, () => toRefValue(editorRef).onAdornText(sonComState.cmd))
+
+        //观察Editor内容变化，传递给预览组件
+        watch(() => edStatus.newContent, () => htmlContent.value = edStatus.newContent)
+
+        //观察滚动条值变动
+        watch(() => edStatus.scollY, () => {
+            let pDom = toRefValue(previewBoxRef)
+            state.scollY = edStatus.scollY
+            state.lianDong && (pDom.scrollTop = state.scollY)
+        })
 
         return {
             htmlContent, markdownContent, editorRef, state, onLayoutChange, previewBoxRef
@@ -104,9 +74,9 @@ const MkEditorComponent = defineComponent({
     },
     render() {
         const loadingHtml = this.state.isLoading ? (<EditorLoadingComponent />) : ("");
-        const previewBoxClass = this.state.fenPing ? "w-1/2" : "hidden"
+        const previewBoxClass = this.state.thisScreen == 3 ? ("w-full") : (this.state.thisScreen == 2 ? "w-1/2" : "hidden")
         const layoutHtml = (
-            <EditorLayoutBtnCompoent changeEvent={this.onLayoutChange} fenPing={this.state.fenPing} lianDong={this.state.lianDong} />
+            <EditorLayoutBtnCompoent thisScreen={this.state.thisScreen} changeEvent={this.onLayoutChange} lianDong={this.state.lianDong} />
         )
 
         return (

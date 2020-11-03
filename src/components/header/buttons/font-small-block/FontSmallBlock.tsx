@@ -1,4 +1,4 @@
-import { useClickButtonCommand } from '@/components/use/useClickCommand';
+import { useClickButtonCommand } from '@/components/use/useEvent';
 import { defineComponent } from "vue";
 
 const FontSmallBlockComponent = defineComponent({
