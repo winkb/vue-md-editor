@@ -25,8 +25,9 @@ const MkEditorComponent = defineComponent({
             lianDong: true,
             thisScreen: 2,//1全屏 2分屏  3预览
             lastScreen: 2,
-            scollY: 0,
+            scollY: 0
         })
+        let editorBox = ref("")
         let editorRef = ref("")
         let previewBoxRef = ref("")
         let htmlContent = ref(props.content)
@@ -52,6 +53,10 @@ const MkEditorComponent = defineComponent({
         //注册Editor事件响应处理函数
         const edStatus = useEditorEventsListener(centerHandles)
 
+        const computedScrollTop = (t1: number, h1: number, h2: number, screenHeight: number) => {
+            return (h2 - screenHeight) * (t1 / (h1 - screenHeight))
+        }
+
         //观察Progress状态
         watch(() => sonComState.isLoading, () => state.isLoading = sonComState.isLoading)
 
@@ -63,13 +68,15 @@ const MkEditorComponent = defineComponent({
 
         //观察滚动条值变动
         watch(() => edStatus.scollY, () => {
+            if (!state.lianDong) return
             let pDom = toRefValue(previewBoxRef)
-            state.scollY = edStatus.scollY
-            state.lianDong && (pDom.scrollTop = state.scollY)
+            let [t, h] = [edStatus.scollY, edStatus.scollH]
+            state.scollY = t
+            pDom.scrollTop = computedScrollTop(t, h, pDom.scrollHeight, toRefValue(editorBox).clientHeight)
         })
 
         return {
-            htmlContent, markdownContent, editorRef, state, onLayoutChange, previewBoxRef
+            htmlContent, markdownContent, editorRef, state, onLayoutChange, previewBoxRef, editorBox
         }
     },
     render() {
@@ -96,7 +103,7 @@ const MkEditorComponent = defineComponent({
                         </div>
                     </div>
                     {/* body */}
-                    <div class="w-full flex flex-1 justify-center h-64 ">
+                    <div class="w-full flex flex-1 justify-center h-64" ref="editorBox">
                         {/* left */}
                         <div class=" text-black flex-1  overflow-x-hidden break-words break-all">
                             <EditorComponent ref="editorRef" content={this.markdownContent} />

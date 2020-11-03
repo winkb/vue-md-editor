@@ -65,8 +65,8 @@ export default class CodeMirrorFacade implements CodeMirrorAdapter {
     }
 
     getScollXY() {
-        let { left, top } = this.cm.getScrollInfo()
-        return { x: left, y: top }
+        let { left, top, width, height } = this.cm.getScrollInfo()
+        return { x: left, y: top, w: width, h: height }
     }
 
     lineStartRemove(len: number) {

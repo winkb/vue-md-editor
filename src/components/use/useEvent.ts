@@ -19,6 +19,7 @@ export function useClickButtonCommand(name: string) {
 export function useEditorEventsListener(centerHandles: EditorCenterHandles) {
     const vStatus = reactive({
         scollY: 0,
+        scollH: 0,
         newContent: ""
     })
 
@@ -48,8 +49,9 @@ export function useEditorEventsListener(centerHandles: EditorCenterHandles) {
 
     //滚动条事件
     const scroll = (cm: CodeMirrorAdapter) => {
-        let { y } = cm.getScollXY()
+        let { y, h } = cm.getScollXY()
         vStatus.scollY = y
+        vStatus.scollH = h
     }
 
     //提供event依赖
