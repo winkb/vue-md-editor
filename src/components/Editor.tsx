@@ -1,4 +1,4 @@
-import { defineComponent, inject, onMounted, ref, toRef, watch, watchEffect } from "vue";
+import { defineComponent, inject, onMounted, ref } from "vue";
 import { useAdornTextCommand, useCodeMirror } from './use/useEditor';
 
 function getEditorId() {
