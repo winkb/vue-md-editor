@@ -1,8 +1,9 @@
-import { defineComponent, ref, watchEffect } from "vue";
+import { defineComponent, ref, watch, watchEffect } from "vue";
 import marked from "marked";
 import Prism from "prismjs";
 import "../assets/css/prism.scss"
 import { toRefValue } from './utils/convert';
+import { useThrottle } from '@vueuse/core'
 
 function initMarked() {
     // 新建渲染器
@@ -30,14 +31,21 @@ const PreviewComponent = defineComponent({
     ],
     setup(props) {
         let htmlContent = ref()
-
-        const markedContent = (content: any) => {
-            htmlContent.value = marked(toRefValue(content))
-        }
+        let input = ref("")
 
         initMarked()
 
-        watchEffect(() => markedContent(props.content))
+        const markedContent = (content: any) => {
+            htmlContent.value = marked(toRefValue(content))
+            console.log(content)
+        }
+
+        //防抖
+        let throttled = useThrottle(input, 300)
+
+        watch(throttled, () => markedContent(throttled.value))
+
+        watchEffect(() => input.value = props.content)
 
         return {
             htmlContent
