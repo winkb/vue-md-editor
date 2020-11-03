@@ -1,16 +1,8 @@
-import { defineComponent, Ref, ref, watchEffect } from "vue";
+import { defineComponent, ref, watchEffect } from "vue";
 import marked from "marked";
 import Prism from "prismjs";
 import "../assets/css/prism.scss"
 import { toRefValue } from './utils/convert';
-
-function useMarked(refObj: Ref | String) {
-    return marked(toRefValue(refObj));
-}
-
-function languageClassName(language: string) {
-    return language == ("go" || "golang") ? "clike" : language
-}
 
 function initMarked() {
     // 新建渲染器
@@ -23,7 +15,7 @@ function initMarked() {
             language
         )
 
-        return `<pre><code class="language-${languageClassName(language)}">${hled}</code></pre>`
+        return `<pre><code class="language-${language}">${hled}</code></pre>`
     }
 
     return marked.setOptions({
@@ -39,11 +31,13 @@ const PreviewComponent = defineComponent({
     setup(props) {
         let htmlContent = ref()
 
+        const markedContent = (content: any) => {
+            htmlContent.value = marked(toRefValue(content))
+        }
+
         initMarked()
 
-        watchEffect(() => {
-            htmlContent.value = useMarked(props.content)
-        })
+        watchEffect(() => markedContent(props.content))
 
         return {
             htmlContent
