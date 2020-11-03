@@ -1,25 +1,31 @@
-# test3
+[在线demo]()
 
-## Project setup
-```
-yarn install
-```
+# 使用方法
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+- 引入组件
 
-
-### Compiles and minifies for production
 ```
-yarn build
+<template>
+    <MkEditorComponent :config="config" class="h-full" />
+</template>
 ```
 
-### Lints and fixes files
-```
-yarn lint
+- 配置
+
+```javascript
+const config = {
+    upload() { // 上传处理函数， 返回Promise<{path:string}>
+        return new Promise((r) => {
+        setTimeout(
+            () =>
+            r({
+                path:
+                "https://pic1.zhimg.com/80/v2-2655b868e875f5c76de3e7e4fae118c6_1440w.jpg?source=1940ef5c",
+            }),
+            3000
+        );
+        });
+    },
+}
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
