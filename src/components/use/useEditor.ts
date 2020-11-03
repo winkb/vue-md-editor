@@ -30,21 +30,6 @@ export function useIsPasteImageFromDisk(e: any): Boolean {
     return e.clipboardData.files.length && item.kind == "string"
 }
 
-/**
- * 计算分屏数值
- * @param c 当前值
- * @param last 上次保留值 
- * @param v 期望值 
- * @param [实际值, 保留值]
- */
-export function useScreenTypeValue(c: number, last: number, v: number) {
-    if (v == 3 && c == 3) {
-        return last
-    }
-
-    return v
-}
-
 //获取编辑器粘贴的图片对象
 export function usePasteImage(e: any): undefined | Blob {
     if (!e || !e.clipboardData) {
