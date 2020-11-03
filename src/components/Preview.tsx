@@ -11,7 +11,7 @@ function initMarked() {
     const { copy } = useClipboard()
     let w: any = window
 
-    w.zheTaMadShiYiGeFuzhiZhanTieCopy = (code: string) => {
+    w.zheTaMadShiYiGeFuzhiZhanTie = (code: string) => {
         copy(code)
     }
 
@@ -22,7 +22,7 @@ function initMarked() {
             language
         )
 
-        const btnHtml = `<span onClick="zheTaMadShiYiGeFuzhiZhanTieCopy(\`${code}\`)" class="code-copy-button icon iconfont icon-copy hidden"></span>`
+        const btnHtml = `<span onClick="zheTaMadShiYiGeFuzhiZhanTie(\`${code}\`)" class="code-copy-button icon iconfont icon-copy hidden"></span>`
         const codeHtml = `<pre><code class="language-${language}">${hled}</code></pre>`
 
         return `<div class="hover-hidden-open relative" >${btnHtml}${codeHtml}</div>`
