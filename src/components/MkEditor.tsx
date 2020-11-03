@@ -44,7 +44,7 @@ const MkEditorComponent = defineComponent({
             //取消分屏，自动取消联动
             state.thisScreen != 2 && (state.lianDong = false)
             //设置预览滚动条Top值
-            state.lianDong && (toRefValue(previewBoxRef).scrollTop = state.scollY)
+            state.lianDong && changePreviewScrollTop()
         }
 
         //提供一些基础方法给(子组件/扩展组件)使用
@@ -57,6 +57,14 @@ const MkEditorComponent = defineComponent({
             return (h2 - screenHeight) * (t1 / (h1 - screenHeight))
         }
 
+        //改变预览组件的滚动条
+        const changePreviewScrollTop = () => {
+            let pDom = toRefValue(previewBoxRef)
+            let [t, h] = [edStatus.scollY, edStatus.scollH]
+            state.scollY = t
+            pDom.scrollTop = computedScrollTop(t, h, pDom.scrollHeight, toRefValue(editorBox).clientHeight)
+        }
+
         //观察Progress状态
         watch(() => sonComState.isLoading, () => state.isLoading = sonComState.isLoading)
 
@@ -67,13 +75,7 @@ const MkEditorComponent = defineComponent({
         watch(() => edStatus.newContent, () => htmlContent.value = edStatus.newContent)
 
         //观察滚动条值变动
-        watch(() => edStatus.scollY, () => {
-            if (!state.lianDong) return
-            let pDom = toRefValue(previewBoxRef)
-            let [t, h] = [edStatus.scollY, edStatus.scollH]
-            state.scollY = t
-            pDom.scrollTop = computedScrollTop(t, h, pDom.scrollHeight, toRefValue(editorBox).clientHeight)
-        })
+        watch(() => edStatus.scollY, () => (state.lianDong && changePreviewScrollTop()))
 
         return {
             htmlContent, markdownContent, editorRef, state, onLayoutChange, previewBoxRef, editorBox
