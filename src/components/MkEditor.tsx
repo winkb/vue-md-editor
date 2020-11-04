@@ -8,7 +8,7 @@ import { toRefValue } from './utils/convert'
 import EditorLoadingComponent from './Loading'
 import EditorLayoutBtnCompoent from './header/LayoutBtn'
 
-type LayoutEventName = "thisScreen" | "lianDong"
+type LayoutEventName = "thisScreen" | "lianDong" | "quanPing"
 
 const MkEditorComponent = defineComponent({
     props: {
@@ -22,6 +22,7 @@ const MkEditorComponent = defineComponent({
     setup(props) {
         let state = reactive({
             isLoading: false,
+            quanPing: false,
             lianDong: true,
             thisScreen: 2,//1全屏 2分屏  3预览
             lastScreen: 2,
@@ -37,7 +38,7 @@ const MkEditorComponent = defineComponent({
 
         //监听布局按钮的点击事件
         const onLayoutChange = (name: LayoutEventName, v: number) => {
-            name == "lianDong" && (state.lianDong = !state.lianDong)
+            (name == "lianDong" || name == "quanPing") && (state[name] = !state[name])
             name == "thisScreen" && (v == -1 ? (state.thisScreen = state.lastScreen) : (state.thisScreen = v))
             name == "thisScreen" && v != 3 && (state.lastScreen = state.thisScreen)
 
@@ -85,11 +86,12 @@ const MkEditorComponent = defineComponent({
         const loadingHtml = this.state.isLoading ? (<EditorLoadingComponent />) : ("");
         const previewBoxClass = this.state.thisScreen == 3 ? ("w-full") : (this.state.thisScreen == 2 ? "w-1/2" : "hidden")
         const layoutHtml = (
-            <EditorLayoutBtnCompoent thisScreen={this.state.thisScreen} changeEvent={this.onLayoutChange} lianDong={this.state.lianDong} />
+            <EditorLayoutBtnCompoent quanPing={this.state.quanPing} thisScreen={this.state.thisScreen} changeEvent={this.onLayoutChange} lianDong={this.state.lianDong} />
         )
+        const mainBoxClass = this.state.quanPing ? "fixed" : ""
 
         return (
-            <div class="w-full h-full p-3 markdown-editor">
+            <div class={`w-full h-full markdown-editor left-0 top-0 ${mainBoxClass}`}>
                 <div class=" bg-white relative w-full h-full flex border flex-col shadow p-0 rounded ">
                     {/* progress遮罩 */}
                     {loadingHtml}

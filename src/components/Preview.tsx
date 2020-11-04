@@ -1,7 +1,6 @@
 import { defineComponent, ref, watch, watchEffect } from "vue";
 import marked from "marked";
 import Prism from "prismjs";
-import "../assets/css/prism.scss"
 import { toRefValue } from './utils/convert';
 import { useClipboard, useThrottle } from '@vueuse/core'
 

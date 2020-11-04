@@ -1,5 +1,7 @@
 <template>
-    <MkEditorComponent :config="config" class="h-full" />
+    <div class="w-full h-full p-5">
+        <MkEditorComponent :config="config" />
+    </div>
 </template>
 
 <style>

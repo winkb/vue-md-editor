@@ -5,19 +5,20 @@ const EditorLayoutBtnCompoent = defineComponent({
         "lianDong",
         "thisScreen",
         "changeEvent",
+        "quanPing"
     ],
     setup(props) {
 
         let lianDongClass = computed(() => {
-            return "button iconfont icon-ziyuan " + (props.lianDong ? "text-green-500" : "")
+            return (props.lianDong ? "text-green-500" : "")
         })
 
         let fenPingClass = computed(() => {
-            return "button iconfont icon-fenping " + ((props.thisScreen == 2) ? "text-green-500" : "")
+            return (props.thisScreen == 2) ? "text-green-500" : ""
         })
 
         let isPreviewClass = computed(() => {
-            return "button iconfont icon-yulan " + (props.thisScreen == 3 ? "text-green-500" : "")
+            return (props.thisScreen == 3 ? "text-green-500" : "")
         })
 
         const emitChangeEvent = (name: string, v?: number) => {
@@ -36,11 +37,16 @@ const EditorLayoutBtnCompoent = defineComponent({
             emitChangeEvent("thisScreen", props.thisScreen == 3 ? (-1) : 3)
         }
 
+        const onClickQuanPing = () => {
+            emitChangeEvent("quanPing")
+        }
+
         return () => (
             <div class="header flex flex-wrap items-center h-full w-full">
-                <button onClick={onClickLianDong} class={lianDongClass.value}></button>
-                <button onClick={onClickFenPing} class={fenPingClass.value}></button>
-                <button onClick={onClickIsPreview} class={isPreviewClass.value}></button>
+                <button title="联动" onClick={onClickLianDong} class={"button iconfont icon-ziyuan " + lianDongClass.value}></button>
+                <button title="分屏" onClick={onClickFenPing} class={"button iconfont icon-fenping " + fenPingClass.value}></button>
+                <button title="预览" onClick={onClickIsPreview} class={"button iconfont icon-yulan " + isPreviewClass.value}></button>
+                <button title="全屏" onClick={onClickQuanPing} class="button iconfont icon-quanping"></button>
             </div>
         )
     }
