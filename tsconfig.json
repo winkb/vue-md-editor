@@ -16,10 +16,7 @@
             "webpack-env"
         ],
         "paths": {
-            "@/*": [
-                "src/*"
-            ],
-            "@components/*": [
+            "MkEditor/*": [
                 "src/components/*"
             ]
         },

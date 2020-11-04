@@ -1,5 +1,5 @@
+import { useClickButtonCommand } from 'MkEditor/use/useEvent';
 import { defineComponent } from "vue";
-import { useClickButtonCommand } from '../../../use/useEvent';
 
 const FontBlodComponent = defineComponent({
     setup() {

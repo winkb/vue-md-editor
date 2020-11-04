@@ -1,5 +1,5 @@
-import EdirotDialogComponent from '@/components/official/dialog/Dialog';
-import { useClickButtonCommand } from '@/components/use/useEvent';
+import EdirotDialogComponent from 'MkEditor/official/dialog/Dialog';
+import { useClickButtonCommand } from 'MkEditor/use/useEvent';
 import { defineComponent, provide, ref } from "vue";
 import FontLinkFormComponent from './Form';
 

@@ -1,6 +1,6 @@
-import EdirotDialogComponent from '@/components/official/dialog/Dialog';
-import { useClickButtonCommand, useInjectCenterHandles } from '@/components/use/useEvent';
-import { toAny } from '@/components/utils/convert';
+import EdirotDialogComponent from 'MkEditor/official/dialog/Dialog';
+import { useClickButtonCommand, useInjectCenterHandles } from 'MkEditor/use/useEvent';
+import { toAny } from 'MkEditor/utils/convert';
 import { defineComponent, provide, ref } from "vue";
 import FontImageFormComponent from './Form';
 

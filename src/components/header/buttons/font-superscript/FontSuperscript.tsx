@@ -1,4 +1,4 @@
-import { useClickButtonCommand } from '@/components/use/useEvent';
+import { useClickButtonCommand } from 'MkEditor/use/useEvent';
 import { defineComponent } from "vue";
 
 const FontSuperscriptComponent = defineComponent({
